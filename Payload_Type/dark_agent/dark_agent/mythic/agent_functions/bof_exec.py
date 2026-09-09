@@ -17,10 +17,19 @@ class BofExecuteArguments(TaskArguments):
             CommandParameter(
                 name="bof_args",
                 type=ParameterType.String,
-                description="Arguments to pass to the BOF",
+                description="Split arguments to pass to the BOF",
                 parameter_group_info=[ParameterGroupInfo(
                     required=False,
                     ui_position=2
+                )]
+            ),
+            CommandParameter(
+                name="bof_args_str",
+                type=ParameterType.String,
+                description="String arguments to pass to the BOF",
+                parameter_group_info=[ParameterGroupInfo(
+                    required=False,
+                    ui_position=3
                 )]
             )
         ]
@@ -48,7 +57,7 @@ class BofExecuteCommand(CommandBase):
 
     async def create_go_tasking(self, taskData: PTTaskMessageAllData) -> PTTaskCreateTaskingMessageResponse:
         name = taskData.args.get_arg("name")
-        bof_args = taskData.args.get_arg("bof_args") or ""
+        bof_args = taskData.args.get_arg("bof_args") or taskData.args.get_arg("bof_args_str") or ""
         display = name if not bof_args else f"{name} {bof_args}"
         return PTTaskCreateTaskingMessageResponse(TaskID=taskData.Task.ID, Success=True, DisplayParams=display)
 
