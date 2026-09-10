@@ -265,18 +265,18 @@ GCEOF
 }
 
 build_macos_release() {
-    build_macos "--release --no-debug" "output/dark-agent-macos" "release mode"
+    build_macos "--release --no-debug" "output/out" "release mode"
 }
 
 build_macos_debug() {
-    build_macos "-D debug" "output/dark-agent-macos-debug" "debug mode"
+    build_macos "-D debug" "output/out-debug" "debug mode"
 }
 
 
 # Clean outputs
 clean() {
     log_action "Cleaning output directory..."
-    rm -f output/dark-agent output/dark-agent-debug output/dark-agent-direct output/dark-agent-direct.ll output/socks-server output/dark-agent-socks-debug output/dark-agent-macos output/dark-agent-macos-debug output/dark-agent-macos*.o
+    rm -f output/dark-agent output/dark-agent-debug output/dark-agent-direct output/dark-agent-direct.ll output/socks-server output/dark-agent-socks-debug output/dark-agent-macos output/dark-agent-macos-debug output/dark-agent-macos*.o output/out*
     rm -f output/bofs/*.o output/bofs/macos/*.o 2>/dev/null || true
     log_success "Cleaned Dark Agent builds and BOF object files"
 }

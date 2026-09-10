@@ -54,35 +54,35 @@ class KillCommand(CommandBase):
         supported_os=[SupportedOS.Linux, SupportedOS.MacOS]
     )
 
-    async def opsec_pre(self, taskData: PTTaskMessageAllData) -> PTTTaskOPSECPreTaskMessageResponse:
-        pid = taskData.args.get_arg("pid")
-        signal = taskData.args.get_arg("signal")
-        
-        # Add immediate visible output for the OPSEC check
-        await SendMythicRPCResponseCreate(MythicRPCResponseCreateMessage(
-            TaskID=taskData.Task.ID,
-            Response=f"🚨 TWO PERSON INTEGRITY REQUIRED 🚨\n\nAttempting to terminate process PID {pid} with signal {signal}.\n\nWaiting for approval from another operator before execution..."
-        ))
-        
-        response = PTTTaskOPSECPreTaskMessageResponse(
-            TaskID=taskData.Task.ID,
-            Success=True,
-            OpsecPreBlocked=True,
-            OpsecPreBypassRole="operator",
-            OpsecPreMessage=f"SECURITY REVIEW REQUIRED: Process termination blocked for OPSEC review.\n\nPID: {pid}\nSignal: {signal}\n\nKilling processes can trigger security alerts and may impact system stability. Another operator must review and approve this action."
-        )
-        return response
+    #async def opsec_pre(self, taskData: PTTaskMessageAllData) -> PTTTaskOPSECPreTaskMessageResponse:
+    #    pid = taskData.args.get_arg("pid")
+    #    signal = taskData.args.get_arg("signal")
+    #    
+    #    # Add immediate visible output for the OPSEC check
+    #    await SendMythicRPCResponseCreate(MythicRPCResponseCreateMessage(
+    #        TaskID=taskData.Task.ID,
+    #        Response=f"🚨 TWO PERSON INTEGRITY REQUIRED 🚨\n\nAttempting to terminate process PID {pid} with signal {signal}.\n\nWaiting for approval from another operator before execution..."
+    #    ))
+    #    
+    #    response = PTTTaskOPSECPreTaskMessageResponse(
+    #        TaskID=taskData.Task.ID,
+    #        Success=True,
+    #        OpsecPreBlocked=True,
+    #        OpsecPreBypassRole="operator",
+    #        OpsecPreMessage=f"SECURITY REVIEW REQUIRED: Process termination blocked for OPSEC review.\n\nPID: {pid}\nSignal: {signal}\n\nKilling processes can trigger security alerts and may impact system stability. Another operator must review and approve this action."
+    #    )
+    #    return response
 
     async def create_go_tasking(self, taskData: PTTaskMessageAllData) -> PTTaskCreateTaskingMessageResponse:
-        # Add approval information as output
-        approval_info = ""
-        if hasattr(taskData.Task, 'OpsecPreBypassed') and taskData.Task.OpsecPreBypassed:
-            approval_info = f"\n✅ COMMAND APPROVED\n\n"
-
-            await SendMythicRPCResponseCreate(MythicRPCResponseCreateMessage(
-                TaskID=taskData.Task.ID,
-                Response=approval_info
-            ))
+        ## Add approval information as output
+        #approval_info = ""
+        #if hasattr(taskData.Task, 'OpsecPreBypassed') and taskData.Task.OpsecPreBypassed:
+        #    approval_info = f"\n✅ COMMAND APPROVED\n\n"
+        #
+        #    await SendMythicRPCResponseCreate(MythicRPCResponseCreateMessage(
+        #        TaskID=taskData.Task.ID,
+        #        Response=approval_info
+        #    ))
 
         response = PTTaskCreateTaskingMessageResponse(
             TaskID=taskData.Task.ID,

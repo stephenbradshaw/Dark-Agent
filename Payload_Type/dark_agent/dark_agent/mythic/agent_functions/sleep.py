@@ -69,51 +69,51 @@ class SleepCommand(CommandBase):
         builtin=True
     )
 
-    async def opsec_pre(self, taskData: PTTaskMessageAllData) -> PTTTaskOPSECPreTaskMessageResponse:
-        seconds = taskData.args.get_arg("seconds")
-
-        # Check if sleep value is < 10
-        if seconds < 10:
-            # Special message for sleep 0
-            if seconds == 0:
-                warning_message = f"🚨 TWO PERSON INTEGRITY REQUIRED 🚨\n\n⚠️ SLEEP 0 DETECTED ⚠️\n\nThis will create continuous beaconing with NO delay!\nHighly recommend using 'sleep 1' instead for interactive operations.\n\nWaiting for approval from another operator before execution..."
-            else:
-                warning_message = f"🚨 TWO PERSON INTEGRITY REQUIRED 🚨\n\nAggressive sleep interval ({seconds}s) will make the callback very noisy.\n\nWaiting for approval from another operator before execution..."
-
-            # Add immediate visible output for the OPSEC check
-            await SendMythicRPCResponseCreate(MythicRPCResponseCreateMessage(
-                TaskID=taskData.Task.ID,
-                Response=warning_message
-            ))
-
-            response = PTTTaskOPSECPreTaskMessageResponse(
-                TaskID=taskData.Task.ID,
-                Success=True,
-                OpsecPreBlocked=True,
-                OpsecPreBypassRole="operator",
-                OpsecPreMessage=f"SECURITY REVIEW REQUIRED: Aggressive sleep interval blocked for OPSEC review.\n\nSleep value: {seconds} seconds\n\nThis will make the agent beacon very aggressively and may be detected. Another operator must review and approve this sleep interval."
-            )
-        else:
-            response = PTTTaskOPSECPreTaskMessageResponse(
-                TaskID=taskData.Task.ID,
-                Success=True,
-                OpsecPreBlocked=False
-            )
-
-        return response
+    #async def opsec_pre(self, taskData: PTTaskMessageAllData) -> PTTTaskOPSECPreTaskMessageResponse:
+    #    seconds = taskData.args.get_arg("seconds")
+    #
+    #    # Check if sleep value is < 10
+    #    if seconds < 10:
+    #        # Special message for sleep 0
+    #        if seconds == 0:
+    #            warning_message = f"🚨 TWO PERSON INTEGRITY REQUIRED 🚨\n\n⚠️ SLEEP 0 DETECTED ⚠️\n\nThis will create continuous beaconing with NO delay!\nHighly recommend using 'sleep 1' instead for interactive operations.\n\nWaiting for approval from another operator before execution..."
+    #        else:
+    #            warning_message = f"🚨 TWO PERSON INTEGRITY REQUIRED 🚨\n\nAggressive sleep interval ({seconds}s) will make the callback very noisy.\n\nWaiting for approval from another operator before execution..."
+    #
+    #        # Add immediate visible output for the OPSEC check
+    #        await SendMythicRPCResponseCreate(MythicRPCResponseCreateMessage(
+    #            TaskID=taskData.Task.ID,
+    #            Response=warning_message
+    #        ))
+    #
+    #        response = PTTTaskOPSECPreTaskMessageResponse(
+    #            TaskID=taskData.Task.ID,
+    #            Success=True,
+    #            OpsecPreBlocked=True,
+    #            OpsecPreBypassRole="operator",
+    #            OpsecPreMessage=f"SECURITY REVIEW REQUIRED: Aggressive sleep interval blocked for OPSEC review.\n\nSleep value: {seconds} seconds\n\nThis will make the agent beacon very aggressively and may be detected. Another operator must review and approve this sleep interval."
+    #        )
+    #    else:
+    #        response = PTTTaskOPSECPreTaskMessageResponse(
+    #            TaskID=taskData.Task.ID,
+    #            Success=True,
+    #            OpsecPreBlocked=False
+    #        )
+    #
+    #    return response
 
     async def create_go_tasking(self, taskData: PTTaskMessageAllData) -> PTTaskCreateTaskingMessageResponse:
         # Add approval information as output for aggressive sleep values
         seconds = taskData.args.get_arg("seconds")
-        approval_info = ""
-
-        if seconds < 10 and hasattr(taskData.Task, 'OpsecPreBypassed') and taskData.Task.OpsecPreBypassed:
-            approval_info = f"\n✅ COMMAND APPROVED\n"
-
-            await SendMythicRPCResponseCreate(MythicRPCResponseCreateMessage(
-                TaskID=taskData.Task.ID,
-                Response=approval_info
-            ))
+        #approval_info = ""
+        #
+        #if seconds < 10 and hasattr(taskData.Task, 'OpsecPreBypassed') and taskData.Task.OpsecPreBypassed:
+        #    approval_info = f"\n✅ COMMAND APPROVED\n"
+        #
+        #    await SendMythicRPCResponseCreate(MythicRPCResponseCreateMessage(
+        #        TaskID=taskData.Task.ID,
+        #        Response=approval_info
+        #    ))
 
         jitter = taskData.args.get_arg("jitter") or 0
         display = f"{seconds}s" if not jitter else f"{seconds}s jitter {jitter}%"

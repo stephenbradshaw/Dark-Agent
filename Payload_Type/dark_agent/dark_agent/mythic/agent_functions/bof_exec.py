@@ -36,16 +36,16 @@ class BofExecuteArguments(TaskArguments):
 
     async def parse_arguments(self):
         pass
+            
 
     async def parse_dictionary(self, dictionary_arguments):
         self.load_args_from_dictionary(dictionary_arguments)
-
 
 class BofExecuteCommand(CommandBase):
     cmd = "bof_exec"
     needs_admin = False
     help_cmd = "bof_exec [bof_name] [arguments]"
-    description = "Execute a previously loaded BOF with optional arguments"
+    description = "Execute a previously loaded BOF with optional split arguments"
     version = 1
     author = "@nicholasromanowski"
     argument_class = BofExecuteArguments
@@ -57,7 +57,12 @@ class BofExecuteCommand(CommandBase):
 
     async def create_go_tasking(self, taskData: PTTaskMessageAllData) -> PTTaskCreateTaskingMessageResponse:
         name = taskData.args.get_arg("name")
-        bof_args = taskData.args.get_arg("bof_args") or taskData.args.get_arg("bof_args_str") or ""
+        if taskData.args.get_arg("bof_args_str"):
+            bof_args = taskData.args.get_arg("bof_args_str")
+        elif taskData.args.get_arg("bof_args"):
+            bof_args = taskData.args.get_arg("bof_args")
+        else:
+            bof_args = ''
         display = name if not bof_args else f"{name} {bof_args}"
         return PTTaskCreateTaskingMessageResponse(TaskID=taskData.Task.ID, Success=True, DisplayParams=display)
 

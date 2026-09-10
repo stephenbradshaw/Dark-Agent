@@ -423,10 +423,10 @@ class DarkAgent(PayloadType):
                 # OpenSSL is statically linked for both platforms with no runtime libssl dependency.
                 if DEBUG_MODE:
                     build_cmd.extend(["-p", profile_name, "-M"])
-                    output_file = agent_build_path / "output/dark-agent-macos-debug"
+                    output_file = agent_build_path / "output/out-debug"
                 else:
                     build_cmd.extend(["-p", profile_name, "-m"])
-                    output_file = agent_build_path / "output/dark-agent-macos"
+                    output_file = agent_build_path / "output/out"
                 binary_type = "Mach-O"
             else:
                 # Linux build
